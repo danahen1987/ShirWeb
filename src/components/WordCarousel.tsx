@@ -48,7 +48,7 @@ const WordCarousel = ({
 
   return (
     <View style={WordCarouselStyles.container}>
-      <View style={{ width: pageWidth, alignSelf: 'center', direction: 'ltr' }}>
+      <View {...{ dir: 'ltr' as const }} style={{ width: pageWidth, alignSelf: 'center', direction: 'ltr' }}>
         <ScrollView
           ref={scrollRef}
           key={letter}

@@ -227,6 +227,7 @@ const TracingCanvas = ({
       <View style={{ width: canvasSize, height: canvasSize }}>
         <View
           collapsable={false}
+          {...{ dir: 'ltr' as const }}
           style={[TracingCanvasStyles.canvasFrame, { width: canvasSize, height: canvasSize }]}
           onLayout={(event) => {
             const { width } = event.nativeEvent.layout;
@@ -240,6 +241,7 @@ const TracingCanvas = ({
             width={canvasSize}
             height={canvasSize}
             viewBox={`0 0 ${STROKE_VIEWBOX} ${STROKE_VIEWBOX}`}
+            style={{ position: 'absolute', top: 0, left: 0, zIndex: 2 }}
           >
             {strokes.map((stroke) => (
               <Path

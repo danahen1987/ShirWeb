@@ -86,7 +86,7 @@ const InteractiveStrokePracticeModal = ({
 
   return (
     <Modal animationType="slide" transparent visible={visible} onRequestClose={onClose}>
-      <View style={InteractiveStrokePracticeModalStyles.centeredView}>
+      <View {...{ dir: 'rtl' as const }} style={InteractiveStrokePracticeModalStyles.centeredView}>
         <View style={InteractiveStrokePracticeModalStyles.modalView}>
           <View style={InteractiveStrokePracticeModalStyles.header}>
             <TapButton

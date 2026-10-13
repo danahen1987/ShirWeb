@@ -46,7 +46,7 @@ const NumberIcons = ({ value }: { value: number }) => {
   const icon = NUMBER_CARD_ICONS[(value - 1) % NUMBER_CARD_ICONS.length];
   const size = value <= 1 ? 112 : value <= 3 ? 88 : value <= 6 ? 68 : value <= 10 ? 52 : 40;
   return (
-    <View style={[SimpleCharacterCardStyles.numberIcons, { gap: size > 60 ? 16 : 8 }]}>
+    <View {...{ dir: 'ltr' as const }} style={[SimpleCharacterCardStyles.numberIcons, { gap: size > 60 ? 16 : 8 }]}>
       {Array.from({ length: value }, (_, index) => (
         <Text key={`${icon}-${index}`} style={{ fontSize: size, lineHeight: size + 8 }}>
           {icon}

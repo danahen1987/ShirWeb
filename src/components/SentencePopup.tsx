@@ -28,7 +28,7 @@ const SentencePopup = ({
 
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <View style={SentencePopupStyles.centeredView}>
+      <View {...{ dir: 'rtl' as const }} style={SentencePopupStyles.centeredView}>
         <View style={SentencePopupStyles.modalView}>
           <TapButton style={SentencePopupStyles.closeButtonTopRight} onPress={onClose}>
             <Text style={SentencePopupStyles.closeButtonText}>✕</Text>

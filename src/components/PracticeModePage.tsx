@@ -98,7 +98,7 @@ const PracticeModePage = ({
         <View style={PracticeModeStyles.headerSide} pointerEvents="none" />
       </View>
 
-      <View style={PracticeModeStyles.body}>
+      <View {...{ dir: 'ltr' as const }} style={PracticeModeStyles.body}>
         <View style={PracticeModeStyles.canvasColumn}>
           <View
             style={PracticeModeStyles.canvasArea}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, I18nManager } from 'react-native';
+import { View, Text, ActivityIndicator } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { StatusBar } from 'expo-status-bar';
 import LandingPage from './src/components/LandingPage';
@@ -14,9 +14,6 @@ import { ProgressService } from './src/services/ProgressService';
 import ttsService from './src/services/TTSService';
 import { CommonStyles } from './src/styles/AppStyles';
 import { DeckKind } from './src/types';
-
-I18nManager.allowRTL(true);
-I18nManager.forceRTL(true);
 
 type AppView = 'landing' | 'cards' | 'numbers' | 'quizSelect' | 'quiz' | 'practiceSelect' | 'practice';
 type QuizType = 'letters' | 'numbers';
@@ -57,7 +54,7 @@ export default function App() {
 
   if (!databaseReady || !databaseHelper) {
     return (
-      <View style={CommonStyles.loadingContainer}>
+      <View style={CommonStyles.loadingContainer} {...{ dir: 'rtl' as const }}>
         <ActivityIndicator size="large" color="#3498db" />
         <Text style={CommonStyles.loadingText}>טוען את שיר...</Text>
         <StatusBar style="dark" />
@@ -66,7 +63,7 @@ export default function App() {
   }
 
   return (
-    <>
+    <View style={CommonStyles.container} {...{ dir: 'rtl' as const }}>
       <StatusBar style="dark" />
       {currentView === 'landing' && (
         <LandingPage
@@ -153,6 +150,6 @@ export default function App() {
           }}
         />
       )}
-    </>
+    </View>
   );
 }

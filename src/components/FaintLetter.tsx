@@ -18,6 +18,7 @@ const FaintLetter = ({ character, canvasSize }: { character: string; canvasSize:
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'hidden',
+        zIndex: 1,
       }}
     >
       <Text

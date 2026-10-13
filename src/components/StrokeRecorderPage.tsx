@@ -296,7 +296,7 @@ const StrokeRecorderPage = ({ onBack }: { onBack: () => void }) => {
       </View>
 
       <Modal visible={exportVisible} animationType="slide" onRequestClose={() => setExportVisible(false)}>
-        <View style={StrokeRecorderStyles.exportModal}>
+        <View {...{ dir: 'rtl' as const }} style={StrokeRecorderStyles.exportModal}>
           <Text style={StrokeRecorderStyles.exportTitle}>העתקה לצ׳אט</Text>
           <Text style={StrokeRecorderStyles.exportHint}>
             לחצו ארוכות על הטקסט, העתיקו, והדביקו כאן ספרה או אות אחת בכל פעם
