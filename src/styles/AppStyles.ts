@@ -1521,7 +1521,7 @@ export const PracticeModeStyles = StyleSheet.create({
   },
   landscapeHint: {
     textAlign: 'center',
-    color: '#2c3e50',
+    color: '#1b6b3a',
     fontSize: 16,
     fontWeight: 'bold',
     paddingHorizontal: 16,
