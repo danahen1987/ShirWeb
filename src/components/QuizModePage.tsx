@@ -392,7 +392,7 @@ const QuizModePage = ({
     const canGoNext = showResult;
     const arrowStyle =
       placement === 'overlay'
-        ? [SimpleCharacterCardStyles.cardNavArrow, SimpleCharacterCardStyles.cardNavArrowRight]
+        ? [SimpleCharacterCardStyles.cardNavArrow, SimpleCharacterCardStyles.cardNavArrowLeft]
         : [QuizModeStyles.footerNavArrow];
 
     const button = (
@@ -401,7 +401,7 @@ const QuizModePage = ({
         onPress={() => goToQuestion(questionIndex + 1)}
         disabled={!canGoNext}
       >
-        <NavChevron direction={placement === 'overlay' ? 'left' : 'right'} />
+        <NavChevron direction="right" />
       </TapButton>
     );
 

@@ -281,10 +281,10 @@ const SimplePracticeCard = ({
             style={[
               SimpleCharacterCardStyles.cardNavArrow,
               SimpleCharacterCardStyles.cardNavArrowLeft,
-              currentPosition <= 1 && SimpleCharacterCardStyles.cardNavArrowDisabled,
+              currentPosition >= allCharacters.length && SimpleCharacterCardStyles.cardNavArrowDisabled,
             ]}
-            onPress={handlePrevious}
-            disabled={currentPosition <= 1}
+            onPress={handleNext}
+            disabled={currentPosition >= allCharacters.length}
           >
             <NavChevron direction="right" />
           </TapButton>
@@ -293,10 +293,10 @@ const SimplePracticeCard = ({
             style={[
               SimpleCharacterCardStyles.cardNavArrow,
               SimpleCharacterCardStyles.cardNavArrowRight,
-              currentPosition >= allCharacters.length && SimpleCharacterCardStyles.cardNavArrowDisabled,
+              currentPosition <= 1 && SimpleCharacterCardStyles.cardNavArrowDisabled,
             ]}
-            onPress={handleNext}
-            disabled={currentPosition >= allCharacters.length}
+            onPress={handlePrevious}
+            disabled={currentPosition <= 1}
           >
             <NavChevron direction="left" />
           </TapButton>

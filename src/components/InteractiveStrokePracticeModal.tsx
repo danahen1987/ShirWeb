@@ -145,10 +145,10 @@ const InteractiveStrokePracticeModal = ({
               style={[
                 InteractiveStrokePracticeModalStyles.navArrow,
                 InteractiveStrokePracticeModalStyles.navArrowLeft,
-                !canGoPrevious && InteractiveStrokePracticeModalStyles.navArrowDisabled,
+                !canGoNext && InteractiveStrokePracticeModalStyles.navArrowDisabled,
               ]}
-              onPress={onPrevious}
-              disabled={!canGoPrevious}
+              onPress={onNext}
+              disabled={!canGoNext}
             >
               <NavChevron direction="right" />
             </TapButton>
@@ -156,10 +156,10 @@ const InteractiveStrokePracticeModal = ({
               style={[
                 InteractiveStrokePracticeModalStyles.navArrow,
                 InteractiveStrokePracticeModalStyles.navArrowRight,
-                !canGoNext && InteractiveStrokePracticeModalStyles.navArrowDisabled,
+                !canGoPrevious && InteractiveStrokePracticeModalStyles.navArrowDisabled,
               ]}
-              onPress={onNext}
-              disabled={!canGoNext}
+              onPress={onPrevious}
+              disabled={!canGoPrevious}
             >
               <NavChevron direction="left" />
             </TapButton>
