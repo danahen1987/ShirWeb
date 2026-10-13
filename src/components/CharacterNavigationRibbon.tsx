@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback, useState } from 'react';
 import { View, Text, ScrollView, Dimensions } from 'react-native';
 import TapButton from './TapButton';
 import { CharacterNavigationRibbonStyles } from '../styles/AppStyles';
@@ -24,89 +24,54 @@ const CharacterNavigationRibbon = ({
 }: CharacterNavigationRibbonProps) => {
   const isVertical = orientation === 'vertical';
   const scrollViewRef = useRef<ScrollView>(null);
-  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const isScrollingRef = useRef(false);
   const characterRefs = useRef<Array<View | null>>([]);
-  const viewportSizeRef = useRef(isVertical ? 300 : screenWidth);
+  const [viewportSize, setViewportSize] = useState(isVertical ? 300 : screenWidth);
 
-  const autoScrollToCharacter = useCallback((characterIndex: number, animated = true) => {
-    if (!scrollViewRef.current) return;
+  const scrollerNode = () => {
+    const view = scrollViewRef.current as (ScrollView & {
+      getScrollableNode?: () => HTMLElement | null;
+    }) | null;
+    return view?.getScrollableNode?.() ?? null;
+  };
 
-    if (scrollTimeoutRef.current) {
-      clearTimeout(scrollTimeoutRef.current);
-    }
-
-    isScrollingRef.current = true;
-
-    scrollTimeoutRef.current = setTimeout(() => {
-      const node = characterRefs.current[characterIndex];
-      const itemSize = 54;
-      const offset = 20;
-      const fallback = characterIndex * itemSize + offset;
-      const finish = () => {
-        setTimeout(() => {
-          isScrollingRef.current = false;
-        }, animated ? 300 : 0);
-      };
-
-      if (!node || !scrollViewRef.current) {
-        scrollViewRef.current?.scrollTo(
-          isVertical ? { y: Math.max(0, fallback), animated } : { x: Math.max(0, fallback), animated },
-        );
-        finish();
-        return;
-      }
-
-      try {
-        node.measureLayout(
-          scrollViewRef.current as unknown as number,
-          (x, y, width, height) => {
-            if (isVertical) {
-              const itemCenter = y + height / 2;
-              const scrollToY = itemCenter - viewportSizeRef.current / 2;
-              scrollViewRef.current?.scrollTo({
-                y: Math.max(0, scrollToY),
-                animated,
-              });
-            } else {
-              const characterCenter = x + width / 2;
-              const scrollToX = characterCenter - viewportSizeRef.current / 2 + offset;
-              scrollViewRef.current?.scrollTo({
-                x: Math.max(0, scrollToX),
-                animated,
-              });
-            }
-            finish();
-          },
-          () => {
-            scrollViewRef.current?.scrollTo(
-              isVertical ? { y: Math.max(0, fallback), animated } : { x: Math.max(0, fallback), animated },
-            );
-            finish();
-          },
-        );
-      } catch {
-        scrollViewRef.current?.scrollTo(
-          isVertical ? { y: Math.max(0, fallback), animated } : { x: Math.max(0, fallback), animated },
-        );
-        finish();
-      }
-    }, 100);
+  const autoScrollToCharacter = useCallback((characterIndex: number) => {
+    const run = () => {
+      const scroller = scrollerNode();
+      const item = characterRefs.current[characterIndex] as unknown as HTMLElement | null;
+      if (!scroller || !item || typeof item.getBoundingClientRect !== 'function') return;
+      const itemBox = item.getBoundingClientRect();
+      const frame = scroller.getBoundingClientRect();
+      const delta = isVertical
+        ? itemBox.top + itemBox.height / 2 - (frame.top + frame.height / 2)
+        : itemBox.left + itemBox.width / 2 - (frame.left + frame.width / 2);
+      if (Math.abs(delta) < 2) return;
+      if (isVertical) scroller.scrollTop += delta;
+      else scroller.scrollLeft += delta;
+    };
+    requestAnimationFrame(() => requestAnimationFrame(run));
   }, [isVertical]);
 
   useEffect(() => {
     if (characters.length > 0 && currentPosition > 0) {
-      autoScrollToCharacter(currentPosition - 1, true);
+      autoScrollToCharacter(currentPosition - 1);
     }
-  }, [currentPosition, characters.length, autoScrollToCharacter]);
+  }, [currentPosition, characters.length, autoScrollToCharacter, viewportSize]);
 
   useEffect(() => {
-    return () => {
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
+    if (isVertical) return;
+    const scroller = scrollerNode();
+    if (!scroller) return;
+    const onWheel = (event: WheelEvent) => {
+      if (scroller.scrollWidth <= scroller.clientWidth + 1) return;
+      const horizontal = Math.abs(event.deltaX) > Math.abs(event.deltaY);
+      const delta = horizontal ? event.deltaX : event.deltaY;
+      if (delta === 0) return;
+      scroller.scrollLeft += horizontal ? delta : -delta;
+      event.preventDefault();
     };
-  }, []);
+    scroller.addEventListener('wheel', onWheel, { passive: false });
+    return () => scroller.removeEventListener('wheel', onWheel);
+  }, [isVertical, characters.length]);
 
   const getCharacterTextStyle = (character: string, isCurrent = false, isViewed = false) => {
     const characterLength = character ? character.length : 1;
@@ -129,19 +94,13 @@ const CharacterNavigationRibbon = ({
 
   const handleCharacterPress = useCallback(
     (index: number) => {
-      if (!isVertical && isScrollingRef.current) {
-        return;
-      }
       const character = characters[index];
       if (character && onCharacterSelect) {
-        if (!isVertical) {
-          isScrollingRef.current = true;
-        }
         onCharacterSelect(character.id, index + 1);
-        autoScrollToCharacter(index, true);
+        autoScrollToCharacter(index);
       }
     },
-    [characters, onCharacterSelect, autoScrollToCharacter, isVertical],
+    [characters, onCharacterSelect, autoScrollToCharacter],
   );
 
   if (!characters || characters.length === 0) {
@@ -157,8 +116,14 @@ const CharacterNavigationRibbon = ({
         showsVerticalScrollIndicator={false}
         contentContainerStyle={
           isVertical
-            ? CharacterNavigationRibbonStyles.verticalScrollContent
-            : CharacterNavigationRibbonStyles.scrollContent
+            ? [
+                CharacterNavigationRibbonStyles.verticalScrollContent,
+                { paddingVertical: Math.max(12, viewportSize / 2 - 28) },
+              ]
+            : [
+                CharacterNavigationRibbonStyles.scrollContent,
+                { paddingHorizontal: Math.max(24, viewportSize / 2 - 27) },
+              ]
         }
         style={isVertical ? CharacterNavigationRibbonStyles.verticalScrollView : CharacterNavigationRibbonStyles.scrollView}
         decelerationRate={0.98}
@@ -172,7 +137,9 @@ const CharacterNavigationRibbon = ({
         directionalLockEnabled={false}
         onLayout={(event) => {
           const { width, height } = event.nativeEvent.layout;
-          viewportSizeRef.current = isVertical ? height : width || screenWidth;
+          const next = isVertical ? height : width || screenWidth;
+          setViewportSize((prev) => (Math.abs(prev - next) < 2 ? prev : next));
+          if (currentPosition > 0) autoScrollToCharacter(currentPosition - 1);
         }}
       >
         {characters.map((character, index) => {
