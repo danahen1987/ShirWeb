@@ -1519,6 +1519,15 @@ export const PracticeModeStyles = StyleSheet.create({
   canvasColumn: {
     flex: 1,
   },
+  landscapeHint: {
+    textAlign: 'center',
+    color: '#2c3e50',
+    fontSize: 16,
+    fontWeight: 'bold',
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 4,
+  },
   canvasArea: {
     flex: 1,
     backgroundColor: '#fffdf6',

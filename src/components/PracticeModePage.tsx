@@ -106,6 +106,9 @@ const PracticeModePage = ({
 
       <View {...{ dir: 'ltr' as const }} style={PracticeModeStyles.body}>
         <View style={PracticeModeStyles.canvasColumn}>
+          <Text {...{ dir: 'rtl' as const }} style={PracticeModeStyles.landscapeHint}>
+            יש לצפות בדף זה במצב אופקי (תצוגה לרוחב)
+          </Text>
           <View
             style={PracticeModeStyles.canvasArea}
             onLayout={(event) => {
