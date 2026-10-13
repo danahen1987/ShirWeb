@@ -41,9 +41,15 @@ const PracticeModePage = ({
 
   const currentCharacter: PracticeItem | null = characters[currentPosition - 1] || null;
   const strokeData = currentCharacter ? getStrokeData(currentCharacter.character) : null;
+  const clearSpace = traceMode === 'free' ? 64 : 0;
   const cellSize = Math.max(
     0,
-    Math.floor(Math.min(canvasSize.height - 8, (canvasSize.width - COPY_GAP * (COPY_COUNT - 1)) / COPY_COUNT)),
+    Math.floor(
+      Math.min(
+        canvasSize.height - 8 - clearSpace,
+        (canvasSize.width - COPY_GAP * (COPY_COUNT - 1)) / COPY_COUNT,
+      ),
+    ),
   );
 
   const selectCharacter = (id: number, position: number) => {
@@ -128,25 +134,25 @@ const PracticeModePage = ({
                 </View>
                 <View
                   pointerEvents={traceMode === 'free' ? 'auto' : 'none'}
-                  style={traceMode === 'free' ? undefined : PracticeModeStyles.hiddenLayer}
+                  style={traceMode === 'free' ? PracticeModeStyles.freeDrawStack : PracticeModeStyles.hiddenLayer}
                 >
                   <FreeDrawCanvas
                     character={currentCharacter.character}
                     cellSize={cellSize}
                     clearNonce={clearNonce}
                   />
+                  {traceMode === 'free' ? (
+                    <View style={PracticeModeStyles.clearBar} pointerEvents="box-none">
+                      <TapButton
+                        style={PracticeModeStyles.clearButton}
+                        onPress={() => setClearNonce((value) => value + 1)}
+                        hitSlop={TAP_SLOP}
+                      >
+                        <Text style={PracticeModeStyles.clearButtonText}>נקה</Text>
+                      </TapButton>
+                    </View>
+                  ) : null}
                 </View>
-                {traceMode === 'free' ? (
-                  <View style={PracticeModeStyles.clearBar} pointerEvents="box-none">
-                    <TapButton
-                      style={PracticeModeStyles.clearButton}
-                      onPress={() => setClearNonce((value) => value + 1)}
-                      hitSlop={TAP_SLOP}
-                    >
-                      <Text style={PracticeModeStyles.clearButtonText}>נקה</Text>
-                    </TapButton>
-                  </View>
-                ) : null}
               </>
             )}
           </View>

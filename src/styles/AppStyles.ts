@@ -1545,14 +1545,13 @@ export const PracticeModeStyles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 24,
   },
+  freeDrawStack: {
+    alignItems: 'center',
+  },
   clearBar: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 16,
+    marginTop: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 6,
   },
   navSafePad: {
     width: 48,
