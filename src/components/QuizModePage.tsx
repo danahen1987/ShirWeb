@@ -401,7 +401,7 @@ const QuizModePage = ({
         onPress={() => goToQuestion(questionIndex + 1)}
         disabled={!canGoNext}
       >
-        <NavChevron direction="right" />
+        <NavChevron direction={placement === 'overlay' ? 'left' : 'right'} />
       </TapButton>
     );
 

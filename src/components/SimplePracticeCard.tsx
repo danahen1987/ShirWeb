@@ -286,7 +286,7 @@ const SimplePracticeCard = ({
             onPress={handlePrevious}
             disabled={currentPosition <= 1}
           >
-            <NavChevron direction="left" />
+            <NavChevron direction="right" />
           </TapButton>
 
           <TapButton
@@ -298,7 +298,7 @@ const SimplePracticeCard = ({
             onPress={handleNext}
             disabled={currentPosition >= allCharacters.length}
           >
-            <NavChevron direction="right" />
+            <NavChevron direction="left" />
           </TapButton>
         </View>
 

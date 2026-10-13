@@ -150,7 +150,7 @@ const InteractiveStrokePracticeModal = ({
               onPress={onPrevious}
               disabled={!canGoPrevious}
             >
-              <NavChevron direction="left" />
+              <NavChevron direction="right" />
             </TapButton>
             <TapButton
               style={[
@@ -161,7 +161,7 @@ const InteractiveStrokePracticeModal = ({
               onPress={onNext}
               disabled={!canGoNext}
             >
-              <NavChevron direction="right" />
+              <NavChevron direction="left" />
             </TapButton>
           </View>
         </View>
