@@ -1,0 +1,39 @@
+diff --git a/node_modules/expo/node_modules/expo-constants/scripts/get-app-config-android.gradle b/node_modules/expo/node_modules/expo-constants/scripts/get-app-config-android.gradle
+index 1111111..2222222 100644
+--- a/node_modules/expo/node_modules/expo-constants/scripts/get-app-config-android.gradle
++++ b/node_modules/expo/node_modules/expo-constants/scripts/get-app-config-android.gradle
+@@ -2,14 +2,32 @@
+ 
+ import org.apache.tools.ant.taskdefs.condition.Os
+ 
++def resolveNodeBinary() {
++  def fromEnv = System.getenv("NODE_BINARY")
++  if (fromEnv && new File(fromEnv).canExecute()) {
++    return fromEnv
++  }
++  def localFile = new File(rootProject.projectDir, "local.properties")
++  if (localFile.exists()) {
++    def props = new Properties()
++    localFile.withInputStream { props.load(it) }
++    def dir = props.getProperty("nodejs.dir")
++    if (dir && new File(dir, "node").canExecute()) {
++      return new File(dir, "node").absolutePath
++    }
++  }
++  return ["/opt/homebrew/bin/node", "/usr/local/bin/node"].find { new File(it).canExecute() } ?: "node"
++}
+ 
++def nodeBinary = resolveNodeBinary()
++
+ def expoConstantsDir = project.providers.exec {
+   workingDir(projectDir)
+-  commandLine("node", "-e", "console.log(require('path').dirname(require.resolve('expo-constants/package.json')));")
++  commandLine(nodeBinary, "-e", "console.log(require('path').dirname(require.resolve('expo-constants/package.json')));")
+ }.standardOutput.asText.get().trim()
+ 
+ def config = project.hasProperty("react") ? project.react : [];
+-def nodeExecutableAndArgs = config.nodeExecutableAndArgs ?: ["node"]
++def nodeExecutableAndArgs = config.nodeExecutableAndArgs ?: [nodeBinary]
+ 
+ afterEvaluate {
+   def expoGradleExtension = gradle.extensions.findByName("expoGradle")

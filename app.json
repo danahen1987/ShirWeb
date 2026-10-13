@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "שיר",
+    "slug": "ShirWeb",
+    "version": "1.0.1",
+    "orientation": "default",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.shirapp.letters",
+      "adaptiveIcon": {
+        "backgroundColor": "#FFFDF6",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "extra": {
+      "supportsRTL": true
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro",
+      "output": "single"
+    },
+    "experiments": {
+      "baseUrl": "/ShirWeb"
+    },
+    "plugins": [
+      "expo-localization",
+      "expo-screen-orientation"
+    ]
+  }
+}

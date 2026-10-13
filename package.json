@@ -1,0 +1,30 @@
+{
+  "name": "shirweb",
+  "version": "1.0.1",
+  "main": "index.ts",
+  "dependencies": {
+    "@expo/metro-runtime": "~57.0.16",
+    "expo": "~57.0.21",
+    "expo-localization": "~57.0.1",
+    "expo-screen-orientation": "~57.0.2",
+    "expo-speech": "~57.0.2",
+    "expo-status-bar": "~57.0.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-native": "0.86.3",
+    "react-native-svg": "15.15.4",
+    "react-native-web": "^0.21.2"
+  },
+  "devDependencies": {
+    "@types/react": "~19.2.2",
+    "patch-package": "^8.0.1",
+    "typescript": "~6.0.3"
+  },
+  "scripts": {
+    "start": "expo start --web",
+    "web": "expo start --web",
+    "export:web": "expo export --platform web",
+    "postinstall": "patch-package"
+  },
+  "private": true
+}
