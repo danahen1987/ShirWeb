@@ -113,7 +113,12 @@ const FreeDrawCanvas = ({
           </View>
         ))}
       </View>
-      <Svg pointerEvents="none" width={width} height={height}>
+      <Svg
+        pointerEvents="none"
+        width={width}
+        height={height}
+        style={{ position: 'absolute', top: 0, left: 0, zIndex: 2 }}
+      >
         {inkPaths.map((d, index) => (
           <Path
             key={`ink-${index}`}
